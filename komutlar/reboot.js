@@ -1,37 +1,35 @@
-const {RichEmbed} = require("discord.js");
-//const ayarlar = require('../ayarlar.json')// [package required: discord.js]
-exports.run = async (client, message, args, level) => {
-  //if(message.author.id !== "486817385051979786") return message.reply(`bu komutu sadece Bot Sahibi kullanabilir!`);
-  // EMBED
-  let embed = new RichEmbed()
-  .setColor("RANDOM")
-  .setTitle("» Bot yeniden başlatılıyor...")
-  await message.channel.send(embed); // send the embed
-  // unload all commands before shutting down
-  
-  console.log("Bot yeniden başlıyor...");
+const Discord = require('discord.js');
+const moment = require('moment');
 
-  // you can always leave out this code // (cmd part)
-  client.commands.forEach( async cmd => {
-    await client.unloadCommand(cmd);
-  }); // end of cmd function
-
-  // shut down the bot
-  process.exit(1);
-}; // end of code
+exports.run = (client, message, args) => {
+message.channel.sendMessage(' **Botun Yeniden Başlatılmasını Onaylıyor Musun ?**')
+.then(() => {
+  message.channel.awaitMessages(response => response.content === "evet", {
+    max: 1,
+    time: 30000,
+    errors: ['time'],
+  })
+  .then((collected) => {
+      message.channel.sendMessage('  **Yeniden Başlıyorum**   ').then(message => {
+      console.log(`[${moment().format('YYYY-MM-DD HH:mm:ss')}] :space_invader: **Bot Yeniden Başlatılıyor** :space_invader:`)
+      process.exit(1);
+    }).catch(console.error)
+    })
+    .catch(() => {
+      message.channel.sendMessage(' `Yeniden Başlama İşlemini İptal Ettim` ');
+    });
+});
+};
 
 exports.conf = {
   enabled: true,
   guildOnly: false,
-  aliases: ["reeboot", "reset", "yenile", "yeniden-başlat"],
-  permLevel: 5,
-    kategori: "yapımcı",
- 
+  aliases: ['yenile','yb'],
+  permLevel: 4
 };
 
 exports.help = {
-  name: "reboot",
-  description: "Botu yeniden başlatır.",
-  usage: "reboot",
- 
+  name: 'reboot',
+  description: '[YAPIMCI]',
+  usage: 'reboot'
 };

@@ -1,52 +1,34 @@
-const Discord = require('discord.js');
-const Jimp = require('jimp');
-const db = require('quick.db'),
-      ms = require('parse-ms');
+const Discord = require("discord.js");
+var Jimp = require('jimp');
 
-exports.run = async (bot, message, args) => {
-  
-   if(message.guild.id !== '627204002676736031') return message.channel.send('Bu komut sadece \`DESTEK\` sunucumda çalışmaktadır.')
- 
-  
-    
+exports.run = async (client, message, args) => {
+    var user = message.mentions.users.first() || message.author;
+    if (!message.guild) user = message.author;
+   
+    message.channel.send(`:timer: | Fotoğraf hazırlanıyor, lütfen bekleyin.`).then(m => m.delete(1000));
 
-     const snekfetch = require("snekfetch");
-snekfetch.get(`https://discordbots.org/api/bots/${bot.user.id}/check?userId=${message.author.id}`)
-.set("Authorization", bot.ayarlar.dbltoken)
-.then(response => {
-var check = response.body.voted;
-if (check == 1) {
-    
-    if(message.member.roles.has('658196534906716171') === true) return message.channel.send(`Zaten \`Partner\` rolün bulunuyor fazlasını ne yapacaksın`)
+Jimp.read(user.avatarURL, (err, image) => {
+    image.resize(315, 310)
+    Jimp.read("https://cdn.discordapp.com/attachments/643085769358966813/646100707186835456/partner2.png", (err, avatar) => {
+        avatar.resize(315, 320)
+        image.composite(avatar, 1, 0).write(`./img/partner/${client.user.id}-${user.id}.png`);
+        setTimeout(function() {
+            message.channel.send(new Discord.Attachment(`./img/partner/${client.user.id}-${user.id}.png`));
+        }, 1000);
+    });
 
- 
-  const embed = new Discord.RichEmbed()
-  .setColor('RANDOM')
-  .setDescription('``Partner`` rolünüzü aldınız\nBotu oyladığınız için teşekkürler.')
-.setTimestamp()
-  message.channel.send(embed)
-  message.member.addRole('658196534906716171')
-
-    } else {
-let embed = new Discord.RichEmbed()
-      .setTitle('HATA')
-      .setColor('RANDOM')
-      .setDescription(`${bot.emojis.get(bot.emojiler.hayır)} **Hata**, Partner rolünü almak için \`12\` saat aralıkla **[BURADAN](https://discordbots.org/bot/${bot.user.id}/vote)**  botu oylamanız gerekmektedir. Onayladıktan sonra sisteme geçmesi **1-4** dakikayı bulabilir, lütfen bekleyin. `)
-    message.channel.send(embed)
-      return }});
-};
+});
+}
 
 exports.conf = {
-  enabled: true,
-  guildOnly: false,
-  aliases: ['partner','partner-rol'],
-
-  kategori: "kullanıcı",
-    permLevel: 0,
-};
-
-exports.help = {
-  name: 'partner',
-  description: 'Rol almanızı sağlar',
-  usage: 'partner'
-};
+    enabled: true,
+    guildOnly: false,
+    aliases: [],
+    permLevel: 2
+  };
+  
+  exports.help = {
+    name: 'partner',
+    description: 'Fotoğrafınızın Üstüne Partner Logosu Ekler',
+    usage: 'partner'
+  };

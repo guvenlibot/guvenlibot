@@ -1,39 +1,28 @@
 const Discord = require('discord.js');
-const client = new Discord.Client();
 
-exports.run = async (client, message) => {
-  
-  const db = require('quick.db');
-    var s = 'tr'
-  var a = client.commands.get('davet').help.name
-    if(db.has(`dil_${message.guild.id}`) === true) {
-        var s = 'en'
-        var a = client.commands.get('davet').help.enname
-    }
-    const dil = client[s]
-    const o = a
-    const msg = message
+let botid = ('') //bu yere botun id'sini yapıştırın.
+//eğer botunuz dbl(discord bot list) de yoksa Bota Oy Ver (Vote) olmucaktır.
 
-  const davet = new Discord.RichEmbed()
-.setColor("RANDOM")
-.setAuthor(`${client.user.username}`, client.user.avatarURL)
-.setDescription(`[${dil.special.botinvite}](https://discordapp.com/oauth2/authorize?client_id=${client.user.id}&scope=bot&permissions=8)\n[${dil.special.panel}](${client.ayarlar.webpanel})\n[${dil.special.supportserver}](https://discordapp.com/invite/knESwdy) \n[${dil.special.DBLpage}](https://discordbots.org/bot/${client.user.id}) \n[${dil.special.DBLvote}](https://discordbots.org/bot/${client.user.id}/vote)
-`)
-message.channel.send(davet)
+exports.run = (client, message, args) => {
+    const embed = new Discord.RichEmbed()
+    .setColor("RANDOM")
+    .setAuthor(`${client.user.username} İletişim Bilgileri`)
+    .addField('BİZ KİMİZ?', 'Discord kullanıcıların sunucularını daha iyi hale getirmek için çabalayan bir ekibiz.')//ne kadar yetkili komutunuz varsa o kadar .addField('prefix+komut', 'açıklama/kullanım amacı') koyun
+    .addField(`» Linkler`, `[Bot Davet Linki](https://discord.com/oauth2/authorize?client_id=722199361534296167&scope=bot&permissions=2146958847) **|** [Destek Sunucusu](https://discord.gg/AHe4u4m) **|** [Web Sitesi ( Yakında )]()`)//websiteniz yoksa  **|** [Web Sitesi]() yeri silebilirsiniz
+    message.channel.sendEmbed(embed);
 
 };
 
 exports.conf = {
   enabled: true,
-  guildOnly: true,
-  aliases: ['linkler', 'destek', 'destek-sunucu', 'web', 'site', 'webpanel', 'web-panel', 'dashboard','invite'],
+  guildOnly: false,
+  aliases: [],
   permLevel: 0,
-  kategori: "bot",
 };
 
 exports.help = {
-  name: 'davet',
-  description: 'Botun davet linklerini gösterir.',
-  usage: 'davet',
-
+  name: 'bizkimiz',
+  description: 'bot hakkında bilgi',
+  usage: 'davetet'
 };
+   

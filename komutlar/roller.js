@@ -1,30 +1,27 @@
-const Discord = require('discord.js');
-const client = new Discord.Client();
+const Discord = require("discord.js")
+const {RichEmbed} = require('discord.js');
+const client = new Discord.Client()
 
-exports.run = async (client, message) => {
-  
-  const db = require('quick.db');
-  
- 
-  
-  const embed = new Discord.RichEmbed()
-  .setColor("RANDOM")
-  .setAuthor(message.guild.name, message.guild.iconURL)
-  .setDescription(`${message.guild.roles.filter(r => r.name !== "@everyone").map(r => r).join(' **|** ') ? message.guild.roles.filter(r => r.name !== "@everyone").map(r => r).join(' **|** ') : 'Bulunamadı'}`)
-  return message.channel.send(embed)
-};
+const moment = require('moment');
+
+exports.run = async (client, msg, args) => {
+            const embed = new RichEmbed()
+            .setColor("RANDOM")
+            .setAuthor(msg.guild.name, msg.guild.iconURL)
+            .setTitle(`Roller [${msg.guild.roles.size}]`)
+            .setDescription(`<@&${msg.guild.roles.map(role => `${role.id}`).join('>, <@&')}>`)
+            return msg.channel.send(embed)
+    }
 
 exports.conf = {
   enabled: true,
   guildOnly: false,
   aliases: [],
-  permLevel: 0,
-    kategori: "sunucu",
-
+  permLevel: 0
 };
 
 exports.help = {
   name: 'roller',
-  description: 'Bulunduğunuz sunucudaki rolleri gösterir.',
-  usage: 'roller',
+  description: '',
+  usage: 'roller'
 };

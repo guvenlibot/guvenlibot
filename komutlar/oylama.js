@@ -1,42 +1,48 @@
 const Discord = require('discord.js');
-const db = require('quick.db');
 
-exports.run = async (client, message, args) => {
-    
-  const db = require('quick.db');
-  
+ exports.run = (client, message, args) => {
+   message.delete();
 
- 
-  
-   const x = args.slice(0).join(' ');
-  
-    if (!x) return message.reply('Lütfen bir oylama içeriği giriniz');
-    
-    // Create Embed
-    const embed = new Discord.RichEmbed()
-        .setColor("RANDOM")
-        .setAuthor(`${client.user.username} - Oylama sistemi`)
-        .addField('Oylama', x)
-    let msg = await message.channel.send(embed)
-        .then(function (msg) {
-        
-          msg.react("✅");
-            msg.react("❌")           
-        });
-};
+   let question = args.join(' ');
 
-exports.conf = {
-  enabled: true, 
-  guildOnly: false, 
-  aliases: ["anket", "oylama-yap", "anket-aç"],
-  permLevel: 4,
-  kategori: "sunucu",
+   let user = message.author.username
 
+   if (!question) return message.channel.sendEmbed(
+
+     new Discord.RichEmbed()
+
+     .addField(`:x:yazı yazman gerek :x:`)).then(m => m.delete(5000));
+
+     console.log("oylama komutu " + message.author.username + '#' + message.author.discriminator + " tarafından kullanıldı.")
+     message.channel.sendEmbed(
+
+       new Discord.RichEmbed()
+
+       .setColor("RED")
+       .setThumbnail(client.user.avatarURL)
+       .setTimestamp()
+       .setFooter('Oylama Sistemi', client.user.avatarURL)
+
+       .addField(`**Oylama**`, `**${question}**`)).then(function(message) {
+
+         message.react('✅');
+
+         message.react('❌');
+
+       });
+
+     };
+
+     exports.conf = {
+       enabled: true,
+       guildOnly: false,
+       aliases: ['oylama'],
+
+  permLevel: 2
 };
 
 exports.help = {
   name: 'oylama',
-  description: 'Sunucunuzda oylama yapmanızı sağlar.',
-  usage: 'oylama <mesaj>',
- 
+  description: 'Oylama yapmanızı sağlar.',
+  usage: 'oylama <oylamaismi>'
 };

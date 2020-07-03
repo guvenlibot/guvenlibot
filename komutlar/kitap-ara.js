@@ -37,7 +37,7 @@ exports.run = async (client, message, args) => {
                         return
                 }
        
-                const data = body.items[0].volumeInfo;
+const data = body.items[0].volumeInfo;
  
                 const embed = new Discord.RichEmbed()
                         .setAuthor(`${data.title} | Kitap bilgileri`, "https://i.imgur.com/N3oHABo.png", `https://books.google.com.tr/`)
@@ -53,7 +53,6 @@ exports.run = async (client, message, args) => {
                         }
                         embed.setColor("RANDOM")
                 message.channel.send({embed})
-          message.react('617413726768988160')
         } catch (err) {
                 message.channel.send(`HATA: ${err}`)
         }

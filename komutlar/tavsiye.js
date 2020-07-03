@@ -1,46 +1,34 @@
-const Discord = require('discord.js')
-const id = '617420409436110869'
+const Discord = require('discord.js');
 
-exports.run = (client, message, args) => {
-    const bildiri = args.join(" ")
-    if (!args[0]) {
-        const embed = new Discord.RichEmbed()
-            .setDescription(`Lütfen geçerli bir bildiri yazın. Eğer boş/gereksiz bildiri gönderirseniz bottan engellenirsiniz.`)
-            .setTimestamp()
-            .setColor("RANDOM")
-        message.channel.send({embed})
-        return
-    }
-  
-    const embed = new Discord.RichEmbed()
-        .setDescription(`Bildiriniz başarıyla bot geliştiricisine iletilmiştir ${client.emojis.get(client.emojiler.evet)}`)
-        .setTimestamp()
-        .setColor("RANDOM")
-    message.channel.send({embed})
-    
-    message.channel.createInvite({maxAge: 0}).then(async (invite) => {
-        const embed = new Discord.RichEmbed()
-            .addField(`Bildiren Kişi`, message.author.tag)
-            .addField(`Bildirinin Yapıldığı Sunucu`, message.guild.name)
-            .addField(`Bildirinin Yapıldığı Sunucunun Davet Linki`, invite.url)
-            .addField(`Bildiri`, bildiri)
-            .setColor("RANDOM")
-            .setTimestamp()
-        client.channels.get(id).send({embed})
-      message.react('639954634227580958')
-    })
-}
+
+exports.run = function(client, message, args) {
+    let type = args.slice(0).join(' ');
+    if (type.length < 1) return message.channel.send(
+new Discord.RichEmbed()
+.setDescription('Doğru Kullanım: !tavsiye Bence bunu bunu eklerseniz daha iyi olur'));
+const embed = new Discord.RichEmbed()
+.setColor('RANDOM')
+.setDescription('Tavsiyeniz başarıyla bildirildi! İyi GÜNLER')
+message.channel.send(embed)
+const embed2 = new Discord.RichEmbed()
+.setColor("RANDOM")
+.setDescription(`**${message.author.tag}** adlı kullanıcının tavsiyesi:`)
+.addField(`Kulanıcı Bilgileri`, `Kullanıcı ID: ${message.author.id}\nKullanıcı Adı: ${message.author.username}\nKullanıcı Tagı: ${message.author.discriminator}`)
+.addField("Tavsiye", type)
+.setThumbnail(message.author.avatarURL)
+client.channels.get('649271996856795136').send(embed2); // Kanal ID 
+
+};
 
 exports.conf = {
-    enabled: true,
-    guildOnly: false,
-    aliases: ['rapor', 'raporla', 'tavsiye', 'tavsiyeet', 'tavsiyet', 'öner', 'öneri', 'bildir'],
-    permLevel: 0,
-  kategori: "bot"
-}
+  enabled: true,
+  guildOnly: false, 
+  aliases: [],
+  permLevel: 0 
+};
 
 exports.help = {
-    name: 'tavsiye',
-    description: 'Bot geliştiricisine hataları raporlamayı/tavsiye vermeyi/öneri iletmeyi sağlar.',
-    usage: 'tavsiye [bildiri]'
-}
+  name: 'tavsiye',
+  description: 'Bot için tavsiye bildirirsiniz',
+  usage: 'tavsiye <tavsiyeniz>'
+};
